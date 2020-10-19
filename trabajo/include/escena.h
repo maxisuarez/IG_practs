@@ -88,6 +88,11 @@ class Escena1 : public Escena
       Escena1() ;
 } ;
 
+class Escena2 : public Escena
+{
+public:
+    Escena2();
+};
 
 // -------------------------------------------------------------------------
 // COMPLETAR: Práctica 2, 3, 4 y 5.

@@ -160,6 +160,8 @@ Escena1::Escena1()
 
    // añadir el objeto 'Cubo' a la lista de objetos de esta escena:
    objetos.push_back( new Cubo() );
+   objetos.push_back(new Tetaedro());
+   objetos.push_back(new CuboColores());
 
    // COMPLETAR: Práctica 1: creación del resto objetos de la práctica 1
    // Añadir objetos al vector 'objetos', con:
@@ -175,7 +177,17 @@ Escena1::Escena1()
 // Añadir la implementación del constructor de la clase Escena2 para construir
 // los objetos que se indican en los guiones de las práctica 2
 // .......
+Escena2::Escena2()
+{
+    using namespace std;
+    cout << "Creando objetos de escena 1 .... " << flush;
+    objetos.push_back(new Cilindro(5, 15));
+    objetos.push_back(new Cono(5, 15));
+    objetos.push_back(new Esfera(10, 20));
 
+
+    cout << "hecho." << endl << flush;
+}
 
 
 // -------------------------------------------------------------------------

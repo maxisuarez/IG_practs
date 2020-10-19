@@ -460,6 +460,7 @@ void Inicializar( int argc, char *argv[] )
    // crear los objetos y las escenas que forman, insertar escenas en 'escenas'
 
    escenas.push_back( new Escena1() );
+   escenas.push_back(new Escena2());
 
    // COMPLETAR: Prácticas 2,3,4 y 5
    // hacer 'push_back' en el vector de escenas de instancias de 'Escena2',

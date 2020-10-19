@@ -27,7 +27,30 @@ void MallaRevol::inicializar
 )
 {
    // COMPLETAR: Práctica 2: completar: creación de la malla....
+	int m = perfil.size();
 
+	for (int i = 0; i < num_copias; i++) {
+		for (int j = 0; j < m; j++) {
+			float alpha = 2 * M_PI * i / (num_copias - 1);
+			float c = cos(alpha);
+			float s = sin(alpha);
+			vertices.push_back({ perfil[j][X]*c, perfil[j][Y], perfil[j][X]*s });
+		 }
+	 }
+
+	for (int i = 0; i < num_copias - 1; i++) {
+		for (int j = 0; j < m - 1; j++) {
+			int k = i * m + j;
+			triangulos.push_back({ k, k + m, k + m + 1 });
+			triangulos.push_back({ k, k + m + 1, k + 1 });
+		}
+	}
+
+	//COLORINESS
+	for (int i = 0; i < vertices.size(); i++) {
+		Tupla3f aux(vertices[i](0) * 0.5 + 0.5, vertices[i](1) * 0.5 + 0.5, vertices[i](2) * 0.5 + 0.5);
+		col_ver.push_back(aux);
+	}
 
 
 
@@ -47,8 +70,47 @@ MallaRevolPLY::MallaRevolPLY
    // COMPLETAR: práctica 2: crear la malla de revolución
    // Leer los vértice del perfil desde un PLY, después llamar a 'inicializar'
    // ...........................
-
+   std::vector<Tupla3f> perfil;
+   LeerVerticesPLY(nombre_arch, perfil);
+   inicializar(perfil, nperfiles);
 
 }
+
+Cilindro::Cilindro(const int num_verts_per, const unsigned nperfiles)
+{
+	ponerNombre("Cilindro");
+	std::vector<Tupla3f> perfil;
+	for (int i = 0; i < num_verts_per; i++)
+		perfil.push_back({ 1, float(i / (num_verts_per - 1)), 0 });
+
+	inicializar(perfil, nperfiles);
+}
+
+Cono::Cono(const int num_verts_per, const unsigned nperfiles)
+{
+	ponerNombre("Cono");
+	std::vector<Tupla3f> perfil;
+	for (int i = 0; i <= num_verts_per; i++)
+		perfil.push_back({ float(1-i/(num_verts_per-1)),  float(i / (num_verts_per - 1)), 0 });
+
+	inicializar(perfil, nperfiles);
+}
+
+Esfera::Esfera(const int num_verts_per, const unsigned nperfiles)
+{
+	ponerNombre("Cono");
+	std::vector<Tupla3f> perfil;
+	for (int i = 0; i <= num_verts_per; i++) {
+		float alpha = 2 * M_PI * i / (num_verts_per - 1);
+		perfil.push_back({ cos(alpha),  sin(alpha), 0 });
+	}
+
+
+
+	inicializar(perfil, nperfiles);
+}
+
+
+
 
 

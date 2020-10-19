@@ -92,6 +92,18 @@ class Cubo24 : public MallaInd
       Cubo24();
 } ;
 
+class Tetaedro : public MallaInd
+{
+public:
+    Tetaedro();
+};
+
+class CuboColores : public MallaInd
+{
+public:
+    CuboColores();
+};
+
 
 
 #endif

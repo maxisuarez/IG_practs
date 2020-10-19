@@ -1,9 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\recursos",
+    "\\recursos\\include",
     "\\trabajo",
-    "\\trabajo\\cmake-win",
-    "\\trabajo\\cmake-win\\build"
+    "\\trabajo\\include",
+    "\\trabajo\\src"
   ],
+  "SelectedNode": "\\trabajo\\src\\main.cpp",
   "PreviewInSolutionExplorer": false
 }
