@@ -81,5 +81,25 @@ public:
      
 };
 
+class Semiesfera : public MallaRevol
+{
+public:
+    // Constructor: crea el perfil original y llama a inicializar
+    // La esfera tiene el centro en el origen, el radio es la unidad
+    Semiesfera
+    (const int num_verts_per, // número de vértices del perfil original (M)
+        const unsigned nperfiles // número de perfiles (N)
+    );
+
+};
+
+class CilindroCerrado : public MallaRevol 
+{  
+public:
+
+  CilindroCerrado(const int num_verts_per,
+	   const unsigned nperfiles);
+};
+
 
 #endif

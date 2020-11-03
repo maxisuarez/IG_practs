@@ -10,6 +10,7 @@
 #include "camara.h"
 #include "materiales-luces.h"
 #include "seleccion.h"
+#include "modelo-jer.h"
 
 
 
@@ -181,14 +182,25 @@ Escena2::Escena2()
 {
     using namespace std;
     cout << "Creando objetos de escena 1 .... " << flush;
-    objetos.push_back(new Cilindro(5, 15));
-    objetos.push_back(new Cono(5, 15));
-    objetos.push_back(new Esfera(10, 20));
+    objetos.push_back(new Cilindro(50, 100));
+    objetos.push_back(new Cono(50, 100));
+    objetos.push_back(new Esfera(50, 100));
+    //objetos.push_back(new Semiesfera(10, 20));
+    //objetos.push_back(new CilindroCerrado(50, 100));
 
 
     cout << "hecho." << endl << flush;
 }
 
+
+Escena3::Escena3()
+{
+    using namespace std;
+    cout << "Creando objetos de escena 3 .... " << flush;
+    objetos.push_back(new C());
+
+    cout << "hecho." << endl << flush;
+}
 
 // -------------------------------------------------------------------------
 // COMPLETAR: Práctica 3

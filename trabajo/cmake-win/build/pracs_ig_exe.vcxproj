@@ -389,6 +389,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\Usuario\Desktop\IG\trabajo\src\malla-ind.cpp" />
     <ClCompile Include="C:\Users\Usuario\Desktop\IG\trabajo\src\malla-revol.cpp" />
     <ClCompile Include="C:\Users\Usuario\Desktop\IG\trabajo\src\materiales-luces.cpp" />
+    <ClCompile Include="C:\Users\Usuario\Desktop\IG\trabajo\src\modelo-jer.cpp" />
     <ClCompile Include="C:\Users\Usuario\Desktop\IG\trabajo\src\objeto3d.cpp" />
     <ClCompile Include="C:\Users\Usuario\Desktop\IG\trabajo\src\seleccion.cpp" />
     <ClCompile Include="C:\Users\Usuario\Desktop\IG\recursos\src\cauce.cpp" />
@@ -406,6 +407,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\Usuario\Desktop\IG\trabajo\include\malla-ind.h" />
     <ClInclude Include="C:\Users\Usuario\Desktop\IG\trabajo\include\malla-revol.h" />
     <ClInclude Include="C:\Users\Usuario\Desktop\IG\trabajo\include\materiales-luces.h" />
+    <ClInclude Include="C:\Users\Usuario\Desktop\IG\trabajo\include\modelo-jer.h" />
     <ClInclude Include="C:\Users\Usuario\Desktop\IG\trabajo\include\objeto3d.h" />
     <ClInclude Include="C:\Users\Usuario\Desktop\IG\trabajo\include\practicas.h" />
     <ClInclude Include="C:\Users\Usuario\Desktop\IG\trabajo\include\seleccion.h" />

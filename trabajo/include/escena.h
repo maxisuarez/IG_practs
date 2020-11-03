@@ -94,6 +94,11 @@ public:
     Escena2();
 };
 
+class Escena3 : public Escena
+{
+public:
+    Escena3();
+};
 // -------------------------------------------------------------------------
 // COMPLETAR: Práctica 2, 3, 4 y 5.
 // Añadir la declaración de las clases Escena2, Escena3, etc ..... para definir

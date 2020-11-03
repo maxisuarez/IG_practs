@@ -97,9 +97,10 @@ void MallaInd::visualizarGL( ContextoVis & cv )
      array_verts->fijarIndices(GL_UNSIGNED_INT, (const GLsizei ) triangulos.size()*3, ( const GLvoid *) triangulos[0] );
   }
 
-  if ( col_ver.size()!=0 ){
+   if ( col_ver.size()!=0 && !cv.cauce_act.tieneColor()){
      array_verts->fijarColores(GL_FLOAT, 3,( const GLvoid *) col_ver[0]);
   }
+
   if ( cc_tt_ver.size()!=0 ){
      array_verts->fijarCoordText(GL_FLOAT, 2,( const GLvoid *) cc_tt_ver[0]);
   }

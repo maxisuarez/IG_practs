@@ -45,16 +45,6 @@ void MallaRevol::inicializar
 			triangulos.push_back({ k, k + m + 1, k + 1 });
 		}
 	}
-
-	//COLORINESS
-	for (int i = 0; i < vertices.size(); i++) {
-		Tupla3f aux(vertices[i](0) * 0.5 + 0.5, vertices[i](1) * 0.5 + 0.5, vertices[i](2) * 0.5 + 0.5);
-		col_ver.push_back(aux);
-	}
-
-
-
-
 }
 
 // -----------------------------------------------------------------------------
@@ -88,9 +78,9 @@ Cilindro::Cilindro(const int num_verts_per, const unsigned nperfiles)
 
 Cono::Cono(const int num_verts_per, const unsigned nperfiles)
 {
-	ponerNombre("Cono");
+	ponerNombre("Esfera");
 	std::vector<Tupla3f> perfil;
-	for (int i = 0; i <= num_verts_per; i++)
+	for (int i = 0; i < num_verts_per; i++)
 		perfil.push_back({ float(1-i/(num_verts_per-1)),  float(i / (num_verts_per - 1)), 0 });
 
 	inicializar(perfil, nperfiles);
@@ -98,17 +88,43 @@ Cono::Cono(const int num_verts_per, const unsigned nperfiles)
 
 Esfera::Esfera(const int num_verts_per, const unsigned nperfiles)
 {
-	ponerNombre("Cono");
+	ponerNombre("Esfera");
 	std::vector<Tupla3f> perfil;
-	for (int i = 0; i <= num_verts_per; i++) {
+	for (int i = 0; i < num_verts_per; i++) {
 		float alpha = 2 * M_PI * i / (num_verts_per - 1);
 		perfil.push_back({ cos(alpha),  sin(alpha), 0 });
 	}
 
-
-
 	inicializar(perfil, nperfiles);
 }
+
+Semiesfera::Semiesfera(const int num_verts_per, const unsigned nperfiles)
+{
+	ponerNombre("Semi-Esfera");
+	std::vector<Tupla3f> perfil;
+	for (int i = 0; i < num_verts_per; i++) {
+		float alpha =  M_PI * i / (num_verts_per - 1);
+		perfil.push_back({ cos(alpha),  sin(alpha), 0 });
+	}
+	inicializar(perfil, nperfiles);
+}
+
+
+CilindroCerrado::CilindroCerrado(const int num_verts_per,
+				 const unsigned nperfiles){
+    
+  std::vector<Tupla3f> perfil; 
+  perfil.push_back({0.0,0.0,0.0}); 
+  perfil.push_back({1.0,0.0,0.0});
+  
+  for(int i = 0; i < num_verts_per; i++)
+    perfil.push_back({1.0,float(i/(num_verts_per-1)),0.0});
+
+  perfil.push_back({1.0,1.0,0.0});
+  perfil.push_back({0.0,1.0,0.0});
+  inicializar(perfil, nperfiles);
+}
+
 
 
 
