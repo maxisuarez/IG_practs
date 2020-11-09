@@ -8,8 +8,22 @@
 #include "malla-revol.h"
 
 class C :  public NodoGrafoEscena
-{ public:
+{ 
+private:
+    //param 0
+    Matriz4f* mat_traslacion;
+    Matriz4f* mat_mov_brazo1;
+    Matriz4f* mat_mov_brazo2;
+    Matriz4f* mat_mov_cabeza;
+
+
+public:
     C();
+
+    void actualizarEstadoParametro(const unsigned iParam, const float t_sec);
+
+    unsigned leerNumParametros() const;
+
 };
 
 
@@ -34,8 +48,17 @@ class Cuello : public NodoGrafoEscena
 };
 
 class Brazo : public NodoGrafoEscena
-{ public:
-    Brazo();
+{
+    private:
+    
+    public:
+        Brazo();
+        Matriz4f* mat_mov_brazo;
+
+        /*
+        void actualizarEstadoParametro(const unsigned iParam, const float t_sec);
+
+        unsigned leerNumParametros() const;*/
 };
 
 class SemiesferaInv : public NodoGrafoEscena
@@ -51,6 +74,20 @@ class Tronco : public NodoGrafoEscena
 class Pierna : public NodoGrafoEscena
 { public:
     Pierna();
+};
+
+class Cabeza : public NodoGrafoEscena
+{
+    private:
+     
+    public:
+        Cabeza();
+        Matriz4f* mat_mov_cabeza;
+
+        /*
+        void actualizarEstadoParametro(const unsigned iParam, const float t_sec);
+
+        unsigned leerNumParametros() const;*/
 };
 
 #endif

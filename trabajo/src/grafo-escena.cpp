@@ -140,7 +140,7 @@ unsigned NodoGrafoEscena::agregar( const EntradaNGE & entrada )
    // COMPLETAR: práctica 3: agregar la entrada al nodo, devolver índice de la entrada agregada
    // ........
    entradas.push_back(entrada);
-
+   cout << entradas.size() - 1 << endl;
     return entradas.size()-1;
 
 }

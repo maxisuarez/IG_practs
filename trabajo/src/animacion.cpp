@@ -52,9 +52,9 @@ bool ProcesarTeclaAnimacion( Objeto3D * objeto, int glfw_key )
 
    switch( glfw_key )
    {
-      //case GLFW_KEY_PAGE_UP :
+   
       case GLFW_KEY_RIGHT_BRACKET : // tecla '+' en el teclado normal (NO en la plantilla)
-      case GLFW_KEY_KP_ADD :    // tecla '+' en el teclado numérico ¿?
+      case GLFW_KEY_KP_ADD :    // t-ecla '+' en el teclado numérico ¿?
          if ( ! animaciones_activadas )
          {  animaciones_activadas = true ;
             ultima_actu = steady_clock::now(); // registrar instante de última actualización
@@ -66,7 +66,7 @@ bool ProcesarTeclaAnimacion( Objeto3D * objeto, int glfw_key )
          }
          break ;
 
-      //case GLFW_KEY_PAGE_DOWN :
+ 
       case GLFW_KEY_SLASH :        // tecla con '-' y '_' en el teclado normal (NO en la plantilla)
       case GLFW_KEY_KP_SUBTRACT :  // tecla '-' en el teclado numérico
          if ( animaciones_activadas )
