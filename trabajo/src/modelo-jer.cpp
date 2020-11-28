@@ -1,3 +1,5 @@
+// Nombre: Maximino, Apellidos: Suarez van Gelderen, DNI/Pasaporte: 44668999D (DDGG IG curso 20-21) 
+
 #include <math.h>
 #include "matrices-tr.h"
 #include "grafo-escena.h"

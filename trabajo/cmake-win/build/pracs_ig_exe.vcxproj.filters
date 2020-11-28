@@ -69,9 +69,6 @@
     <ClInclude Include="C:\Users\Usuario\Desktop\IG\trabajo\include\escena.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Usuario\Desktop\IG\trabajo\include\exp4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="C:\Users\Usuario\Desktop\IG\trabajo\include\grafo-escena.h">
       <Filter>Header Files</Filter>
     </ClInclude>

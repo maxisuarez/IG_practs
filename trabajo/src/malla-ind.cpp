@@ -1,3 +1,5 @@
+// Nombre: Maximino, Apellidos: Suarez van Gelderen, DNI/Pasaporte: 44668999D (DDGG IG curso 20-21) 
+
 // *********************************************************************
 // **
 // ** Informática Gráfica, curso 2020-21
