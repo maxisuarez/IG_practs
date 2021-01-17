@@ -11,6 +11,7 @@
 #include "materiales-luces.h"
 #include "seleccion.h"
 #include "modelo-jer.h"
+#include "latapeones.h"
 
 
 
@@ -21,11 +22,17 @@ Escena::Escena()
 {
    // COMPLETAR: Práctica 4: inicializar 'col_fuentes' y 'material_ini'
    // ...
+   
+  col_fuentes = new Col2Fuentes();
 
+  material_ini = new Material();
 
    // COMPLETAR: Práctica 5: hacer 'push_back' de varias camaras perspectiva u ortogonales,
    // (sustituir la cámara orbital simple ('CamaraOrbitalSimple') por varias cámaras de 3 modos ('Camara3Modos')
-   camaras.push_back( new CamaraOrbitalSimple() );
+   camaras.push_back(new Camara3Modos(true, {7.5,0.0,0.0}, 1.5, {0.0,0.0,0.0},70.0));
+  camaras.push_back(new Camara3Modos(false, {7.5,7.5,7.5}, 1.5, {0.0,0.0,0.0},70.0));
+  camaras.push_back(new Camara3Modos(true, {0.0,0.0,7.5}, 1.5, {0.0,0.0,0.0},70.0));   
+
 
 }
 // -----------------------------------------------------------------------------------------------
@@ -79,7 +86,16 @@ void Escena::visualizarGL( ContextoVis & cv )
       // * activar la colección de fuentes de la escena
       // * activar el material inicial
       // ....
+      cauce->fijarEvalMIL( true );
+      cauce->fijarEvalText( false );
 
+      if(col_fuentes != nullptr)
+	      col_fuentes->activar(*cauce);
+
+      if(material_ini != nullptr){
+	      cv.material_act=material_ini;
+	      cv.material_act->activar(*cauce);
+      }
    }
    else // si la iluminación no está activada, deshabilitar MIL y texturas
    {  cauce->fijarEvalMIL( false );
@@ -92,12 +108,37 @@ void Escena::visualizarGL( ContextoVis & cv )
    // COMPLETAR: Práctica 1: visualizar el objeto actual ('objeto')
    objeto->visualizarGL(cv);
 
-   // si hay un FBO, dibujarlo (opcional...)
-
-
+/*Intento de meter normales 
+   if ( cv.visualizar_normales && !cv.modo_seleccion )
+      visualizarNormales( cv );
+*/
 }
 
+void Escena::visualizarNormales( ContextoVis & cv )
+{
+   // recuperar el objeto raiz de esta escena y comprobar que está ok.
+   bool ilum_ant = cv.iluminacion ;
+   assert( cv.cauce_act != nullptr );
+   Objeto3D * objeto = objetos[ind_objeto_actual] ; assert( objeto != nullptr );
 
+   // configurar el cauce:
+   cv.cauce_act->fijarEvalMIL( false );
+   cv.cauce_act->fijarEvalText( false );
+   cv.cauce_act->fijarModoSombrPlano( true ); // sombreado plano
+   glLineWidth( 1.5 ); // ancho de líneas (se queda puesto así)
+   glColor4f( 1.0, 0.7, 0.4, 1.0 ); // color de las normales
+
+   // configurar el contexto de visualizacion
+   cv.visualizando_normales = true ;   // hace que MallaInd::visualizarGL visualize las normales.
+   cv.iluminacion           = false ;
+
+   // visualizar objeto actual
+   objetos[ind_objeto_actual]->visualizarGL( cv );
+
+   // restaurar atributos cambiados en el contexto de visualización
+   cv.visualizando_normales = false ;
+   cv.iluminacion = ilum_ant ;
+}
 
 
 
@@ -160,7 +201,7 @@ Escena1::Escena1()
    cout << "Creando objetos de escena 1 .... " << flush ;
 
    // añadir el objeto 'Cubo' a la lista de objetos de esta escena:
-   objetos.push_back( new Cubo() );
+   objetos.push_back( new Cubo24() );
    objetos.push_back(new Tetaedro());
    objetos.push_back(new CuboColores());
 
@@ -184,7 +225,7 @@ Escena2::Escena2()
     cout << "Creando objetos de escena 1 .... " << flush;
     objetos.push_back(new Cilindro(50, 100));
     objetos.push_back(new Cono(50, 100));
-    objetos.push_back(new Esfera(50, 100));
+    objetos.push_back(new Esfera(50,100));
     //objetos.push_back(new Semiesfera(10, 20));
     //objetos.push_back(new CilindroCerrado(50, 100));
 
@@ -202,6 +243,28 @@ Escena3::Escena3()
     cout << "hecho." << endl << flush;
 }
 
+
+Escena4::Escena4()
+{
+    using namespace std;
+    cout << "Creando objetos de escena 4 .... " << flush;
+    objetos.push_back(new LataPeones("../recursos/imgs/lata-coke.jpg", "Lata Coca-Cola", 16711680));
+    objetos.push_back(new NodoCubo());
+    //objetos.push_back(new PeonMadera());
+    //objetos.push_back(new PeonBlanco());
+    //objetos.push_back(new PeonNegro());
+
+    cout << "hecho." << endl << flush;
+}
+
+Escena5::Escena5()
+{
+    using namespace std;
+    cout << "Creando objetos de escena 5 .... " << flush;
+    objetos.push_back(new VariasLatasPeones());
+    
+    cout << "hecho." << endl << flush;
+}
 // -------------------------------------------------------------------------
 // COMPLETAR: Práctica 3
 // Añadir la implementación del constructor de la clase Escena3 para construir

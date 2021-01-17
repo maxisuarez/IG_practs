@@ -9,6 +9,8 @@
 using namespace std;
 
 C::C(){
+
+	ponerNombre("Muneco Android");
 	int i = agregar(MAT_Traslacion(0.0, 0.0, 0.0));
 	mat_traslacion = leerPtrMatriz(i);
 
@@ -47,7 +49,7 @@ C::C(){
 
 unsigned C::leerNumParametros() const {
 
-	return 4;
+	return 0;
 }
 
 
@@ -118,6 +120,9 @@ Tronco::Tronco()
 	CilindroCerrado* tronco1 = new CilindroCerrado(50,100);
 	tronco1->ponerColor({0.0,1.0,0.0});
 	agregar(tronco1);
+
+	ponerIdentificador(143047);
+	ponerNombre("Tronco Android");
 }
 
 SemiesferaInv::SemiesferaInv()
@@ -182,7 +187,11 @@ Pierna::Pierna()
 	CilindroCerrado* c = new CilindroCerrado(50,100);
 	c->ponerColor({0.0,1.0,0.0});
 	agregar(c);
-}
+
+	ponerNombre("Cuerpo Android");
+	ponerIdentificador(143047);
+	
+	}
 
 Cabeza::Cabeza()
 {
@@ -196,6 +205,9 @@ Cabeza::Cabeza()
 	agregar(new Oreja());
 	agregar(MAT_Escalado(-1, 1, 1));
 	agregar(new Oreja());
+
+	ponerNombre("Cabeza Android");
+	ponerIdentificador(143047);
 }
 
 /*

@@ -89,9 +89,14 @@ Tupla4f Objeto3D::leerFijarColVertsCauce( ContextoVis & cv )
    // leer color previo
    Tupla4f color_previo = cv.cauce_act->leerColorActual();
 
+/*Intento de meter normales
+   if ( cv.visualizando_normales )
+      return color_previo ;
+*/
    if ( cv.modo_seleccion )
    {
       // modo seleccion: usar el identificador del objeto, si no es -1
+      
       const int ident_nodo = leerIdentificador();
       if ( ident_nodo != -1 )
          FijarColVertsIdent( *(cv.cauce_act), ident_nodo );

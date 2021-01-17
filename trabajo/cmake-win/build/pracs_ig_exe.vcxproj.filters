@@ -16,6 +16,9 @@
     <ClCompile Include="C:\Users\Usuario\Desktop\IG\trabajo\src\grafo-escena.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Usuario\Desktop\IG\trabajo\src\latapeones.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\Usuario\Desktop\IG\trabajo\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -70,6 +73,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Usuario\Desktop\IG\trabajo\include\grafo-escena.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Usuario\Desktop\IG\trabajo\include\latapeones.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Usuario\Desktop\IG\trabajo\include\malla-ind.h">

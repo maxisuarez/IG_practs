@@ -7,6 +7,8 @@
 // **
 // *********************************************************************
 
+
+
 //#include <set>   // std::set
 #include "ig-aux.h"
 #include "tuplasg.h"
@@ -24,6 +26,7 @@ MallaInd::MallaInd()
 {
    // nombre por defecto
    ponerNombre("malla indexada, anónima");
+   ponerIdentificador( 10046464 );
 }
 // -----------------------------------------------------------------------------
 
@@ -31,6 +34,7 @@ MallaInd::MallaInd( const std::string & nombreIni )
 {
    // 'identificador' puesto a 0 por defecto, 'centro_oc' puesto a (0,0,0)
    ponerNombre(nombreIni) ;
+   ponerIdentificador( 10046464 );
 }
 
 //-----------------------------------------------------------------------------
@@ -51,6 +55,20 @@ void MallaInd::calcularNormalesTriangulos()
    // COMPLETAR: Práctica 4: creación de la tabla de normales de triángulos
    // ....
 
+   Tupla3f a,b,m;
+   
+   for(int i = 0; i < triangulos.size(); i++){
+     a = vertices[triangulos[i][1]]-vertices[triangulos[i][0]];
+     b = vertices[triangulos[i][2]]-vertices[triangulos[i][0]];
+
+     m = a.cross(b);
+
+     if( (m[X] != 0) || (m[Y] != 0) || (m[Z] != 0))
+       m = m.normalized();
+
+     nor_tri.push_back(m);
+   }
+
 }
 
 
@@ -62,7 +80,18 @@ void MallaInd::calcularNormales()
    // COMPLETAR: en la práctica 4: calculo de las normales de la malla
    // se debe invocar en primer lugar 'calcularNormalesTriangulos'
    // .......
+     calcularNormalesTriangulos();
 
+   for(int i = 0; i < vertices.size(); i++)
+      nor_ver.push_back({0.0,0.0,0.0});
+
+   for(int i = 0; i < triangulos.size(); i++)
+      for(int j = 0; j < 3; j++)
+         nor_ver[triangulos[i][j]] = nor_ver[triangulos[i][j]]+nor_tri[i];
+
+   for(int i = 0; i < nor_ver.size(); i++)
+      if(nor_ver[i][X]!= 0 || nor_ver[i][Y]!= 0 || nor_ver[i][Z]!= 0)
+         nor_ver[i]=nor_ver[i].normalized();
 
 }
 
@@ -77,6 +106,14 @@ void MallaInd::visualizarGL( ContextoVis & cv )
 
    using namespace std ;
    assert( cv.cauce_act != nullptr );
+
+
+/* INTENTO DE METER NORMALES
+   if(cv.visualizando_normales){
+      visualizarNormales();
+      return;
+   }
+*/
 
    if ( triangulos.size() == 0 || vertices.size() == 0 )
    {  cout << "advertencia: intentando dibujar malla vacía '" << leerNombre() << "'" << endl << flush ;
@@ -152,6 +189,7 @@ MallaPLY::MallaPLY( const std::string & nombre_arch )
    // COMPLETAR: práctica 4: invocar  a 'calcularNormales' para el cálculo de normales
    // .................
 
+   calcularNormales();
 
 
 }
@@ -187,6 +225,9 @@ Cubo::Cubo()
          {1,5,7}, {1,7,3}  // Z+ (+1)
       } ;
 
+   calcularNormales();
+
+   ponerIdentificador( 10046464 );
 }
 
 Tetaedro::Tetaedro()
@@ -209,6 +250,8 @@ Tetaedro::Tetaedro()
     };
 
     ponerColor({ 0.15, 0.15, 0.30 });
+
+   calcularNormales();
 
 
 }
@@ -245,8 +288,114 @@ CuboColores::CuboColores()
         Tupla3f aux(vertices[i](0) * 0.5 + 0.5, vertices[i](1) * 0.5 + 0.5, vertices[i](2) * 0.5 + 0.5);
         col_ver.push_back(aux);
     }
+
+    calcularNormales();
 }
 
 
+Cubo24::Cubo24() : MallaInd("Cubo de 24 vértices")
+{
+  vertices =
+      {  { -1.0, -1.0, -1.0 }, // 0
+         { -1.0, -1.0, +1.0 }, // 1
+         { -1.0, +1.0, -1.0 }, // 2
+         { -1.0, +1.0, +1.0 }, // 3
+         { +1.0, -1.0, -1.0 }, // 4
+         { +1.0, -1.0, +1.0 }, // 5
+         { +1.0, +1.0, -1.0 }, // 6
+         { +1.0, +1.0, +1.0 }, // 7
+
+	       { -1.0, -1.0, -1.0 }, // 0 +8
+         { -1.0, -1.0, +1.0 }, // 1 +8
+         { -1.0, +1.0, -1.0 }, // 2 +8
+         { -1.0, +1.0, +1.0 }, // 3 +8
+         { +1.0, -1.0, -1.0 }, // 4 +8
+         { +1.0, -1.0, +1.0 }, // 5 +8
+         { +1.0, +1.0, -1.0 }, // 6 +8
+         { +1.0, +1.0, +1.0 }, // 7 +8
+
+	      { -1.0, -1.0, -1.0 }, // 0 +16
+         { -1.0, -1.0, +1.0 }, // 1 +16
+         { -1.0, +1.0, -1.0 }, // 2 +16 
+         { -1.0, +1.0, +1.0 }, // 3 +16
+         { +1.0, -1.0, -1.0 }, // 4 +16
+         { +1.0, -1.0, +1.0 }, // 5 +16
+         { +1.0, +1.0, -1.0 }, // 6 +16
+         { +1.0, +1.0, +1.0 } // 7 +16
+      } ;
+
+
+   triangulos =
+      {  {0,1,3}, {0,3,2}, // X-
+         {4,7,5}, {4,6,7}, // X+ (+4)
+         {8,13,9}, {8,12,13}, // Y-
+         {10,11,15}, {10,15,14}, // Y+ (+2)
+         {16,22,20}, {16,18,22}, // Z-
+         {17,21,23}, {17,23,19}  // Z+ (+1)
+      } ;
+
+   cc_tt_ver=
+     {{0,1}, // 0
+      {1,1}, // 1
+      {0,0}, // 2
+      {1,0}, // 3
+      {1,1}, // 4
+      {0,1}, // 5
+      {1,0}, // 6
+      {0,0}, // 7
+
+      {0,0}, // 0 +8
+      {1,0}, // 1 +8
+      {1,0}, // 2 +8
+      {0,0}, // 3 +8
+      {0,1}, // 4 +8
+      {1,1}, // 5 +8
+      {1,1}, // 6 +8
+      {0,1}, // 7 +8
+
+      {1,1}, // 0 +16
+      {0,1}, // 1 +16
+      {1,0}, // 2 +16 
+      {0,0}, // 3 +16
+      {0,1}, // 4 +16
+      {1,1}, // 5 +16
+      {0,0}, // 6 +16
+      {1,0} // 7 +16
+     };
+
+   calcularNormales();
+};
+
+NodoCubo :: NodoCubo(){
+   Textura * tex = new Textura("../recursos/imgs/window-icon.jpg");
+   agregar( new Material(tex, 0.5, 0.4, 0.4, 50) );
+
+   agregar(new Cubo24());
+
+   ponerNombre("Cubo 24 vertices");
+}
+
+void MallaInd::visualizarNormales()
+{
+   using namespace std ;
+
+   if ( nor_ver.size() == 0 )
+   {
+      cout << "Advertencia: intentando dibujar normales de una malla que no tiene tabla (" << leerNombre() << ")." << endl ;
+      return ;
+   }  
+   if ( array_verts_normales == nullptr )
+   {  
+      for( unsigned i = 0 ; i < vertices.size() ; i++ )
+      {  
+         segmentos_normales.push_back( vertices[i] );
+         segmentos_normales.push_back( vertices[i]+ 0.35f*(nor_ver[i]) );
+      }
+      array_verts_normales = new ArrayVertices( GL_FLOAT, 3, segmentos_normales.size(), segmentos_normales.data() );
+   }
+
+   array_verts_normales->visualizarGL_MI_DAE( GL_LINES );
+   CError();
+}
 
 // -----------------------------------------------------------------------------------------------

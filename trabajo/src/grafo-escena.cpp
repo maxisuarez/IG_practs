@@ -24,6 +24,7 @@
 #include "matrices-tr.h"
 #include "grafo-escena.h"
 
+
 using namespace std ;
 
 // *********************************************************************
@@ -82,38 +83,92 @@ EntradaNGE::~EntradaNGE()
 
 void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
 {
+   cv.cauce_act->pushMM();
 
-   // COMPLETAR: práctica 3: recorrer las entradas y visualizar cada nodo.
-   // ........
+   Material * primer_material;
+   if(cv.iluminacion)
+      primer_material=cv.material_act;
+
+    // guardar el color previamente fijado
     const Tupla4f color_previo = leerFijarColVertsCauce( cv );
 
-      // guarda modelview actual
-   cv.cauce_act->pushMM();
-   // recorrer todas las entradas del array que hay en el nodo:
+
    for( unsigned i = 0 ; i < entradas.size() ; i++ )
-      switch( entradas[i].tipo )
-      { case TipoEntNGE::objeto : // entrada objeto:
+    switch( entradas[i].tipo ){
+        case TipoEntNGE::objeto :
+        // entrada objeto:
           entradas[i].objeto->visualizarGL( cv ); // visualizar objeto
           break ;
-       case TipoEntNGE::transformacion : // entrada transf.:
+        case TipoEntNGE::transformacion :
+        // entrada transf.:
           cv.cauce_act->compMM( *(entradas[i].matriz)); // componer matriz
           break ;
-     /* case .....
-          .....*/
-      }
-   // restaura modelview guardada
-   cv.cauce_act->popMM() ;
+        case TipoEntNGE::material :
+          if( cv.iluminacion && !cv.modo_seleccion ){
+             cv.material_act = entradas[i].material;
+             cv.material_act->activar(*cv.cauce_act);
+        }
+          break;
+
+    }
 
     glColor4fv( color_previo );
-   // COMPLETAR: práctica 4: en la práctica 4, si 'cv.iluminacion' es 'true',
-   // se deben de gestionar los materiales:
-   //   1. guardar puntero al material activo al inicio (está en cv.material_act)
-   //   2. si una entrada des de tipo material, activarlo y actualizar 'cv.material_act'
-   //   3. al finalizar, restaurar el material activo al inicio (si es distinto del actual)
+
+    // restaura modelview guardada
+    cv.cauce_act->popMM() ;
+
+    if(cv.iluminacion){
+    cv.material_act=primer_material;
+    cv.material_act->activar(*cv.cauce_act);
+    }
+   /*
+   // COMPLETAR: práctica 3: recorrer las entradas y visualizar cada nodo.
+   //Guardar ModelView
+   cv.cauce_act->pushMM();
+
+   //Guardar Material activo
+   Material * material_pre = cv.iluminacion ? cv.material_act : nullptr;
+
+   // guardar el color previamente fijado
+   const Tupla4f color_previo = leerFijarColVertsCauce( cv );
 
 
+   // Recorrer entradas del array que hay en el nodo
+   for (unsigned i = 0; i < entradas.size(); i++){
+      switch ( entradas[i].tipo ){
+      case TipoEntNGE::objeto :                          // Entrada objeto
+			entradas[i].objeto->visualizarGL( cv ); // visualizar objeto
+         break ;
 
-}
+      case TipoEntNGE::transformacion :                  // Entrada transformacion
+         cv.cauce_act->compMM( *(entradas[i].matriz) );  // Se compone la matriz
+         break;
+      
+      case TipoEntNGE::material:
+         if(cv.iluminacion && !cv.modo_seleccion){
+            cv.material_act = entradas[i].material;
+            cv.material_act->activar(*cv.cauce_act);
+         }
+         break;
+         
+      default:
+         cout << "Error de tipo" << endl;
+         exit(-1);
+         break;
+      }
+   }
+
+   // restaurar el color previamente fijado
+   glColor4fv( color_previo );
+
+   if ( material_pre != nullptr  ){
+      cv.material_act = material_pre ;
+      cv.material_act->activar( *cv.cauce_act );
+   }
+
+   //Restaurar matriz modelview
+   cv.cauce_act->popMM();*/
+   }
 
 
 
@@ -142,7 +197,6 @@ unsigned NodoGrafoEscena::agregar( const EntradaNGE & entrada )
    // COMPLETAR: práctica 3: agregar la entrada al nodo, devolver índice de la entrada agregada
    // ........
    entradas.push_back(entrada);
-   cout << entradas.size() - 1 << endl;
     return entradas.size()-1;
 
 }
@@ -198,6 +252,39 @@ void NodoGrafoEscena::calcularCentroOC()
    //   (si el centro ya ha sido calculado, no volver a hacerlo)
    // ........
 
+   if(centro_calculado)
+    return;
+
+   //Voy calculando los centros de los objetos hijos , hasta llegar al final;
+   std::vector<Tupla3f> hijos;
+   Matriz4f matriz= MAT_Ident();
+
+   //Si es un objeto le calculo el centro si es una transformacion, cambio nuestra matriz de modelado
+
+   for(unsigned int i=0; i<entradas.size(); i++){
+     switch(entradas[i].tipo){
+      case TipoEntNGE::transformacion:
+          matriz=matriz*(*entradas[i].matriz);
+          break;
+      case TipoEntNGE::objeto:
+        entradas[i].objeto->calcularCentroOC();
+        hijos.push_back(matriz*entradas[i].objeto->leerCentroOC());
+        break;
+
+   }
+ }
+
+   //Calculo la media de todos los centros
+   Tupla3f centro={0.0,0.0,0.0};
+
+   for(unsigned int i=0; i<hijos.size(); i++){
+     centro=centro+hijos[i];
+   }
+
+   centro=centro/(float)hijos.size();
+   ponerCentroOC(centro);
+
+   centro_calculado=true;
 }
 // -----------------------------------------------------------------------------
 // método para buscar un objeto con un identificador y devolver un puntero al mismo
@@ -217,17 +304,34 @@ bool NodoGrafoEscena::buscarObjeto
 
    // 1. calcula el centro del objeto, (solo la primera vez)
    // ........
-
+   calcularCentroOC();
 
    // 2. si el identificador del nodo es el que se busca, ya está (terminar)
    // ........
-
-
+   if(leerIdentificador()==ident_busc){
+    centro_wc = mmodelado*leerCentroOC();
+    *objeto = this;
+    return true;
+  }
    // 3. El nodo no es el buscado: buscar recursivamente en los hijos
    //    (si alguna llamada para un sub-árbol lo encuentra, terminar y devolver 'true')
    // ........
+  bool encontrado = false;
 
+  Matriz4f matriz=mmodelado;
+
+  for(unsigned i = 0; i < entradas.size() && !encontrado; i++)
+    switch(entradas[i].tipo){
+    case TipoEntNGE::transformacion:
+      matriz=matriz*(*entradas[i].matriz);
+      break;
+    case TipoEntNGE::objeto:
+      if(entradas[i].objeto->buscarObjeto(ident_busc, matriz, objeto, centro_wc)){
+  	    encontrado=true;
+      }
+      break;
+    }
 
    // ni este nodo ni ningún hijo es el buscado: terminar
-   return false ;
+   return encontrado;
 }

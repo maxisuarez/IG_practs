@@ -36,7 +36,7 @@ Textura::Textura( const std::string & nombreArchivoJPG )
    // COMPLETAR: práctica 4: cargar imagen de textura
    // (las variables de instancia están inicializadas en la decl. de la clase)
    // .....
-
+   imagen = LeerArchivoJPEG(nombreArchivoJPG.c_str(), ancho, alto);
 }
 
 // ---------------------------------------------------------------------
@@ -49,6 +49,13 @@ void Textura::enviar()
    // y configurar parámetros de la textura (glTexParameter)
    // .......
 
+   glGenTextures(1, &ident_textura);
+
+   glBindTexture(GL_TEXTURE_2D, ident_textura);
+  
+   gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, ancho, alto, GL_RGB, GL_UNSIGNED_BYTE, imagen);
+
+   enviada = true;
 }
 
 //----------------------------------------------------------------------
@@ -71,6 +78,12 @@ void Textura::activar( Cauce & cauce  )
 {
    // COMPLETAR: práctica 4: enviar la textura a la GPU (solo la primera vez) y activarla
    // .......
+
+   if(!enviada)
+    enviar();
+  
+  cauce.fijarEvalText(enviada, ident_textura);
+  cauce.fijarTipoGCT(modo_gen_ct, coefs_s, coefs_t);
 
 }
 // *********************************************************************
@@ -125,6 +138,13 @@ void Material::activar( Cauce & cauce )
 {
    // COMPLETAR: práctica 4: activar un material
    // .....
+   if(textura != nullptr)
+    textura->activar(cauce);
+   else
+    cauce.fijarEvalText(false);
+
+   cauce.fijarParamsMIL({k_amb,k_amb,k_amb}, {k_dif,k_dif,k_dif},
+		 {k_pse,k_pse,k_pse}, exp_pse);
 
 }
 //**********************************************************************
@@ -193,7 +213,19 @@ void ColFuentesLuz::activar( Cauce & cauce )
    //   (crear un array con los colores y otro con las posiciones/direcciones,
    //    usar el cauce para activarlas)
    // .....
+   std::vector<Tupla3f> colores;
+   std::vector<Tupla4f> pos_dir;
+   Tupla4f pos_dir_aux;
+   
+   for(int i = 0; i < vpf.size(); i++){
+      colores.push_back(vpf[i]->color);
 
+      pos_dir_aux={float(cos(vpf[i]->longi*M_PI/180.0)*cos(vpf[i]->lati*M_PI/180)),float(sin(vpf[i]->lati*M_PI/180.0)),float(sin(vpf[i]->longi*M_PI/180.0)*cos(vpf[i]->lati*M_PI/180)),0.0};
+      pos_dir.push_back(pos_dir_aux.normalized());
+   }
+   
+   cauce.fijarFuentesLuz(colores, pos_dir);
+ 
 }
 
 // ---------------------------------------------------------------------

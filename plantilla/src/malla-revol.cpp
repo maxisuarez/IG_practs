@@ -22,7 +22,7 @@ using namespace std ;
 // a partir de un perfil y el número de copias que queremos de dicho perfil.
 void MallaRevol::inicializar
 (
-   const std::vector<Tupla3f> & perfil,     // tabla de vértices del perfil original
+   const std::vector<Tupla3f> & perfil,     // tabla de vértices del perfil ||iginal
    const unsigned               num_copias  // número de copias del perfil
 )
 {
